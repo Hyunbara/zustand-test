@@ -3,8 +3,11 @@ import useAppStore from "./store/useAppStore";
 import { usePositionStore } from "./store/usePositionStore";
 import UserList from "./UserList";
 
-// 기존 App 컴포넌트 (간단한 카운터)
+// 🎯 Zustand 사용법 데모 1: 간단한 카운터
+// 가장 기본적인 zustand 사용법을 보여줍니다
 function SimpleCounter() {
+  // store에서 필요한 상태와 액션만 가져오기
+  // 구조분해할당으로 깔끔하게 사용
   const { count, increment, decrement } = useAppStore();
 
   return (
@@ -29,15 +32,21 @@ function SimpleCounter() {
   );
 }
 
-// Lgy2App 컴포넌트 (고급 기능들)
+// 🎯 Zustand 사용법 데모 2: 고급 기능들
+// 여러 store 조합, useEffect와 함께 사용하는 방법을 보여줍니다
 function AdvancedDemo() {
+  // 1. 선택적 구독: 필요한 상태만 선택해서 가져오기
+  // 이렇게 하면 해당 상태가 변경될 때만 컴포넌트가 리렌더링됨
   const position = usePositionStore((state) => state.position);
   const setPosition = usePositionStore((state) => state.setPosition);
+
+  // 2. 구조분해할당으로 여러 상태와 액션 가져오기
   const { count, increment, decrement } = useAppStore();
 
-  // 마우스 위치 추적 효과
+  // 3. useEffect와 함께 사용: 마우스 위치 추적
   useEffect(() => {
     const handleMouseMove = (event: MouseEvent) => {
+      // store의 액션을 호출해서 상태 업데이트
       setPosition({
         x: event.clientX,
         y: event.clientY,
@@ -93,8 +102,10 @@ function AdvancedDemo() {
   );
 }
 
-// 메인 App 컴포넌트
+// 🎯 메인 App 컴포넌트
+// 여러 데모를 전환할 수 있는 네비게이션 기능
 function App() {
+  // 로컬 상태로 현재 보여줄 데모 선택
   const [currentView, setCurrentView] = useState<"simple" | "advanced">(
     "simple"
   );
